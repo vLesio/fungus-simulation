@@ -11,6 +11,13 @@ public class GameManager : Singleton<GameManager>
     private KnowledgeKeeper _knowledgeKeeper = KnowledgeKeeper.Instance;
     private FungusManager _fungusManager = FungusManager.Instance;
 
+    public void Init()
+    {
+        SimulationInitializer.GenerateRandomResourceIncome(_knowledgeKeeper.ResourceIncomeMap);
+        SimulationInitializer.GenerateRandomMoisture(_knowledgeKeeper.MoistureMap);
+        SimulationInitializer.SpawnFungalInCenter(_fungusManager);
+    }
+
     public void Step()
     {
         FungusGrowth();

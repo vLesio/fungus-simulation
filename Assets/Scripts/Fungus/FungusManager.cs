@@ -27,6 +27,26 @@ namespace Fungus
         {
             _knowledgeKeeper.PropagateResourceFlow(FungusResourceTransportMap);
         }
+        
+        public void TryToAddHyphaAtPosition(Vector2Int position)
+        {
+            TryToAddCellTypeAtPosition(position, CellType.Hypha);
+        }
+        
+        public void TryToAddStrobenkoperAtPosition(Vector2Int position)
+        {
+            TryToAddCellTypeAtPosition(position, CellType.Strobenkoper);
+        }
+        
+        public void TryToAddCellTypeAtPosition(Vector2Int position, CellType cellType)
+        {
+            if (FungusMap.ContainsKey(position))
+            {
+                Debug.LogError("Cell already occupied");
+                return;
+            }
+            FungusMap.Add(position, cellType);
+        }
 
         private List<Vector2Int> GetAllCellTypePositions(CellType cellType)
         {
