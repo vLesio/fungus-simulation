@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using CoinPackage.Debugging;
 using Settings;
 using UnityEngine;
+using Utils.Singleton;
 
 namespace GridSystem {
-    public class CGrid : MonoBehaviour {
+    public class CGrid : Singleton<CGrid> {
         [SerializeField] private GameObject cellPrefab;
         
         private SpriteRenderer _renderer;
-
+        private Dictionary<Vector2Int, Cell> _cells = new();
         private AppSettingsDefinition _settings = DevSettings.Instance.appSettings;
         // Start is called before the first frame update
-        void Awake() {
+        protected override void Awake() {
+            base.Awake();
             _renderer = GetComponent<SpriteRenderer>();
             InitializeCells();
         }
@@ -37,7 +39,17 @@ namespace GridSystem {
                     var cell = Instantiate(cellPrefab, transform);
                     cell.transform.localScale = new Vector3(cellWidth, cellHeight, 1f);
                     cell.transform.localPosition = cellPosition;
+                    cell.GetComponent<Cell>().Cords = new Vector2Int(i, j);
+                    CDebug.Log("LOL");
+                    _cells.Add(new Vector2Int(i, j), cell.GetComponent<Cell>());
+                    CDebug.Log("LOL2");
                 }
+            }
+        }
+
+        public void SetCell(Vector2Int cellPos, CellType type, float value = 0f) {
+            if (_cells.TryGetValue(cellPos, out var cell)) {
+                cell.SetCell(type, value);
             }
         }
     }
