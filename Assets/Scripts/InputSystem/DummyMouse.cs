@@ -17,7 +17,6 @@ public class DummyMouse : MonoBehaviour
     void Update()
     {
         if (Input.GetMouseButton(0)){
-            CDebug.Log("Clicking");
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if(hit.collider != null)
             {

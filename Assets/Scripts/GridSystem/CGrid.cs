@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using CoinPackage.Debugging;
 using Settings;
 using UnityEngine;
+using Utils.Singleton;
 
 namespace GridSystem {
-    public class CGrid : MonoBehaviour {
+    public class CGrid : Singleton<CGrid> {
         [SerializeField] private GameObject cellPrefab;
         
         private SpriteRenderer _renderer;
-
+        private Dictionary<Vector2Int, Cell> _cells = new();
         private AppSettingsDefinition _settings = DevSettings.Instance.appSettings;
         // Start is called before the first frame update
-        void Awake() {
+        protected override void Awake() {
+            base.Awake();
             _renderer = GetComponent<SpriteRenderer>();
             InitializeCells();
         }
@@ -34,10 +36,32 @@ namespace GridSystem {
             for (var i = 0; i < _settings.gridSize.x; i++) {
                 for (var j = 0; j < _settings.gridSize.y; j++) {
                     var cellPosition = new Vector3(cellWidth * i, cellHeight * j) + cellShift;
-                    var cell = Instantiate(cellPrefab, transform);
-                    cell.transform.localScale = new Vector3(cellWidth, cellHeight, 1f);
-                    cell.transform.localPosition = cellPosition;
+                    var obj = Instantiate(cellPrefab, transform);
+                    obj.transform.localScale = new Vector3(cellWidth, cellHeight, 1f);
+                    obj.transform.localPosition = cellPosition;
+                    var cell = obj.GetComponent<Cell>();
+                    cell.Cords = new Vector2Int(i, j);
+                    cell.SetCell(CellType.Empty);
+                    _cells.Add(new Vector2Int(i, j), cell);
                 }
+            }
+        }
+
+        public void SetFood(Vector2Int cellPos, float food) {
+            if (_cells.TryGetValue(cellPos, out var cell)) {
+                cell.SetFood(food);
+            }
+        }
+        
+        public void AddFood(Vector2Int cellPos, float food) {
+            if (_cells.TryGetValue(cellPos, out var cell)) {
+                cell.SetFood(food);
+            }
+        }
+        
+        public void SetCell(Vector2Int cellPos, CellType type, float value = -1f) {
+            if (_cells.TryGetValue(cellPos, out var cell)) {
+                cell.SetCell(type);
             }
         }
     }
