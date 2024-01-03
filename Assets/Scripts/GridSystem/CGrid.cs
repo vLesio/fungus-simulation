@@ -41,15 +41,27 @@ namespace GridSystem {
                     obj.transform.localPosition = cellPosition;
                     var cell = obj.GetComponent<Cell>();
                     cell.Cords = new Vector2Int(i, j);
-                    cell.SetCell(CellType.Empty, 0f);
+                    cell.SetCell(CellType.Empty);
                     _cells.Add(new Vector2Int(i, j), cell);
                 }
             }
         }
 
-        public void SetCell(Vector2Int cellPos, CellType type, float value = 0f) {
+        public void SetFood(Vector2Int cellPos, float food) {
             if (_cells.TryGetValue(cellPos, out var cell)) {
-                cell.SetCell(type, value);
+                cell.SetFood(food);
+            }
+        }
+        
+        public void AddFood(Vector2Int cellPos, float food) {
+            if (_cells.TryGetValue(cellPos, out var cell)) {
+                cell.SetFood(food);
+            }
+        }
+        
+        public void SetCell(Vector2Int cellPos, CellType type, float value = -1f) {
+            if (_cells.TryGetValue(cellPos, out var cell)) {
+                cell.SetCell(type);
             }
         }
     }
