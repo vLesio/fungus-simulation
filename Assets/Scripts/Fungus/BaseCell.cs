@@ -5,6 +5,7 @@ namespace Fungus
     public enum CellType
     {
         Dirt,
+        Obstacle,
         Hypha,
         Strobenkoper
     }

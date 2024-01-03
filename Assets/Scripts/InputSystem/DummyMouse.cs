@@ -20,7 +20,15 @@ public class DummyMouse : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if(hit.collider != null)
             {
-                hit.collider.GetComponent<Cell>()?.OnClicked();
+                hit.collider.GetComponent<Cell>()?.OnLeftClicked();
+            }
+        }
+        
+        if (Input.GetMouseButton(1)){
+            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            if(hit.collider != null)
+            {
+                hit.collider.GetComponent<Cell>()?.OnRightClicked();
             }
         }
     }

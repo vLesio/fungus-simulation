@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using CoinPackage.Debugging;
+using Fungus;
 using Settings;
 using UnityEngine;
 using Utils.Singleton;
@@ -41,7 +42,7 @@ namespace GridSystem {
                     obj.transform.localPosition = cellPosition;
                     var cell = obj.GetComponent<Cell>();
                     cell.Cords = new Vector2Int(i, j);
-                    cell.SetCell(CellType.Empty);
+                    cell.SetCell(CellType.Dirt);
                     _cells.Add(new Vector2Int(i, j), cell);
                 }
             }
@@ -55,11 +56,11 @@ namespace GridSystem {
         
         public void AddFood(Vector2Int cellPos, float food) {
             if (_cells.TryGetValue(cellPos, out var cell)) {
-                cell.SetFood(food);
+                cell.AddFood(food);
             }
         }
         
-        public void SetCell(Vector2Int cellPos, CellType type, float value = -1f) {
+        public void SetCell(Vector2Int cellPos, CellType type) {
             if (_cells.TryGetValue(cellPos, out var cell)) {
                 cell.SetCell(type);
             }
