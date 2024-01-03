@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Fungus
 {
@@ -15,12 +17,81 @@ namespace Fungus
 
         public void GrowHyphas()
         {
-            //TODO: implement
+            List<Vector2Int> hyphaPositions = GetAllCellTypePositions(CellType.Hypha);
+            foreach (var hyphaPosition in hyphaPositions)
+            {
+                if(_knowledgeKeeper.TryToGetResourceAmount(hyphaPosition) < 1f)
+                {
+                    continue;
+                }
+                
+                List<Vector2Int> possiblePositions = GetPossiblePositions(hyphaPosition);
+                if (possiblePositions.Count == 0)
+                {
+                    continue;
+                }
+                
+                var resourceSum = 0f;
+                var chances = new Dictionary<Vector2Int, float>();
+                foreach (var possiblePosition in possiblePositions)
+                {
+                    resourceSum += _knowledgeKeeper.TryToGetResourceAmount(possiblePosition);
+                    resourceSum += _knowledgeKeeper.TryToGetMoistureAmount(possiblePosition);
+                    chances.Add(possiblePosition, resourceSum);
+                }
+                var randomValue = Random.Range(0, resourceSum);
+
+                foreach (var positions in chances)
+                {
+                    if (randomValue <= positions.Value)
+                    {
+                        TryToAddHyphaAtPosition(positions.Key);
+                        TryToAddResourceTransport(hyphaPosition, positions.Key);
+                        break;
+                    }
+                }
+            }
         }
 
-        public void GrowStrobenkopers()
+        public void TryToAddResourceTransport(Vector2Int parent, Vector2Int child)
         {
-            //TODO: implement
+            AddFungusFlow(parent, child);
+        }
+        
+        private void AddFungusFlow(Vector2Int from, Vector2Int to)
+        {
+            if (FungusResourceTransportMap.ContainsKey(from))
+            {
+                FungusResourceTransportMap[from].Add(to);
+                return;
+            }
+            FungusResourceTransportMap.Add(from, new List<Vector2Int>{ to });
+        }
+        
+        public List<Vector2Int> GetPossiblePositions(Vector2Int position)
+        {
+            List<Vector2Int> result = new List<Vector2Int>();
+            Vector2Int[] directions = new Vector2Int[]
+            {
+                Vector2Int.up,
+                Vector2Int.down,
+                Vector2Int.left,
+                Vector2Int.right
+            };
+            foreach (var direction in directions)
+            {
+                Vector2Int newPosition = position + direction;
+                if (FungusMap.ContainsKey(newPosition))
+                {
+                    continue;
+                }
+                if (_knowledgeKeeper.RockList.Contains(newPosition))
+                {
+                    continue;
+                }
+                result.Add(newPosition);
+            }
+            return result;
         }
 
         public void TransportResources()
@@ -33,11 +104,6 @@ namespace Fungus
             TryToAddCellTypeAtPosition(position, CellType.Hypha);
         }
         
-        public void TryToAddStrobenkoperAtPosition(Vector2Int position)
-        {
-            TryToAddCellTypeAtPosition(position, CellType.Strobenkoper);
-        }
-        
         public void TryToAddCellTypeAtPosition(Vector2Int position, CellType cellType)
         {
             if (FungusMap.ContainsKey(position))
@@ -46,6 +112,7 @@ namespace Fungus
                 return;
             }
             FungusMap.Add(position, cellType);
+            
         }
 
         private List<Vector2Int> GetAllCellTypePositions(CellType cellType)

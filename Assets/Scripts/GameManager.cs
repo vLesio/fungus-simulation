@@ -27,7 +27,6 @@ public class GameManager : Singleton<GameManager>
 
     private void FungusGrowth()
     {
-        _fungusManager.GrowStrobenkopers();
         _fungusManager.GrowHyphas();
     }
 

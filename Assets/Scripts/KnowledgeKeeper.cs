@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Fungus;
 using Unity.VisualScripting;
 using UnityEngine;
 using Utils;
@@ -10,7 +11,7 @@ public class KnowledgeKeeper : Utils.Singleton.Singleton<KnowledgeKeeper>
     public Dictionary<Vector2Int, float> ResourceMap = new Dictionary<Vector2Int, float>();
     public Dictionary<Vector2Int, float> ResourceIncomeMap = new Dictionary<Vector2Int, float>();
     public Dictionary<Vector2Int, float> MoistureMap = new Dictionary<Vector2Int, float>();
-
+    public List<Vector2Int> RockList = new List<Vector2Int>();
     public void PropagateResourceFlow(Dictionary<Vector2Int, List<Vector2Int>> resourceFlowMap)
     {
         Dictionary<Vector2Int, float> resourcesAfterFlow = new Dictionary<Vector2Int, float>();
@@ -48,6 +49,16 @@ public class KnowledgeKeeper : Utils.Singleton.Singleton<KnowledgeKeeper>
     public float TryToGetResourceAmount(Vector2Int cell)
     {
         if (ResourceMap.TryGetValue(cell, out var amount))
+        {
+            return amount;
+        }
+
+        return 0;
+    }
+    
+    public float TryToGetMoistureAmount(Vector2Int cell)
+    {
+        if (MoistureMap.TryGetValue(cell, out var amount))
         {
             return amount;
         }

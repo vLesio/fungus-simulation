@@ -45,7 +45,8 @@ public static class SimulationInitializer
         var crossPositions = GetCrossPositionsAroundCell(center);
         foreach (var crossPosition in crossPositions)
         {
-            fungusManager.TryToAddStrobenkoperAtPosition(crossPosition);
+            fungusManager.TryToAddHyphaAtPosition(crossPosition);
+            fungusManager.TryToAddResourceTransport(center, crossPosition);
         }
     }
 

@@ -7,7 +7,6 @@ namespace Fungus
         Dirt,
         Obstacle,
         Hypha,
-        Strobenkoper
     }
     
     public class BaseCell
