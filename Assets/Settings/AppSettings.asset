@@ -13,3 +13,9 @@ MonoBehaviour:
   m_Name: AppSettings
   m_EditorClassIdentifier: 
   gridSize: {x: 50, y: 50}
+  cameraMovementSpeed: 1.01
+  cameraZoomRange: {x: 1, y: 20}
+  slowWhenZoomed: 1
+  groundColor: {r: 1, g: 1, b: 1, a: 1}
+  foodColor: {r: 0.7075472, g: 0.5840602, b: 0.5840602, a: 1}
+  obstacleColor: {r: 0.2830189, g: 0.2830189, b: 0.2830189, a: 1}

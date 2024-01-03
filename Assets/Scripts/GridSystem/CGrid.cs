@@ -36,13 +36,13 @@ namespace GridSystem {
             for (var i = 0; i < _settings.gridSize.x; i++) {
                 for (var j = 0; j < _settings.gridSize.y; j++) {
                     var cellPosition = new Vector3(cellWidth * i, cellHeight * j) + cellShift;
-                    var cell = Instantiate(cellPrefab, transform);
-                    cell.transform.localScale = new Vector3(cellWidth, cellHeight, 1f);
-                    cell.transform.localPosition = cellPosition;
-                    cell.GetComponent<Cell>().Cords = new Vector2Int(i, j);
-                    CDebug.Log("LOL");
-                    _cells.Add(new Vector2Int(i, j), cell.GetComponent<Cell>());
-                    CDebug.Log("LOL2");
+                    var obj = Instantiate(cellPrefab, transform);
+                    obj.transform.localScale = new Vector3(cellWidth, cellHeight, 1f);
+                    obj.transform.localPosition = cellPosition;
+                    var cell = obj.GetComponent<Cell>();
+                    cell.Cords = new Vector2Int(i, j);
+                    cell.SetCell(CellType.Empty, 0f);
+                    _cells.Add(new Vector2Int(i, j), cell);
                 }
             }
         }

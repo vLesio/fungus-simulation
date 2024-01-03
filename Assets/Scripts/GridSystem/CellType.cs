@@ -2,6 +2,7 @@
     public enum CellType {
         Empty,
         Obstacle,
-        Food
+        Food,
+        Fungus
     }
 }
