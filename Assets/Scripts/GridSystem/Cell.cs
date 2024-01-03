@@ -17,6 +17,7 @@ namespace GridSystem {
         // Start is called before the first frame update
         void Awake() {
             _cellRenderer = cell.GetComponent<SpriteRenderer>();
+            _food = 0f;
         }
 
         public void OnLeftClicked() {
@@ -41,7 +42,7 @@ namespace GridSystem {
         }
 
         public void SetCell(CellType type) {
-            CDebug.Log($"Setting to {type}");
+            // CDebug.Log($"Setting to {type}");
             _currentType = type;
             switch (type) {
                 case CellType.Dirt:
@@ -53,9 +54,6 @@ namespace GridSystem {
                     _cellRenderer.color = _settings.obstacleColor;
                     break;
                 case CellType.Hypha:
-                    _cellRenderer.color = new Color(Math.Clamp(_food, 0f, 1f), 0f, Math.Clamp(1f - _food, 0f, 1f));
-                    break;
-                case CellType.Strobenkoper:
                     _cellRenderer.color = new Color(Math.Clamp(_food, 0f, 1f), 0f, Math.Clamp(1f - _food, 0f, 1f));
                     break;
                 default:

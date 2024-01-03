@@ -49,6 +49,12 @@ public static class SimulationInitializer
             fungusManager.TryToAddResourceTransport(center, crossPosition);
         }
     }
+    
+    public static void SpawnResourceIncomeInCenter(KnowledgeKeeper knowledgeKeeper)
+    {
+        var center = GetMiddleCell();
+        knowledgeKeeper.ResourceIncomeMap.Add(center, 1f);
+    }
 
     private static Vector2Int GetMiddleCell()
     {

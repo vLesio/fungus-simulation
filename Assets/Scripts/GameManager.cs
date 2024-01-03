@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Fungus;
@@ -8,14 +9,21 @@ using Utils;
 [RequireComponent(typeof(DoNotDestroy))]
 public class GameManager : Singleton<GameManager>
 {
-    private KnowledgeKeeper _knowledgeKeeper = KnowledgeKeeper.Instance;
-    private FungusManager _fungusManager = FungusManager.Instance;
+    private KnowledgeKeeper _knowledgeKeeper;
+    private FungusManager _fungusManager;
+
+    private void Start()
+    {
+        _knowledgeKeeper = KnowledgeKeeper.Instance;
+        _fungusManager = FungusManager.Instance;
+    }
 
     public void Init()
     {
-        SimulationInitializer.GenerateRandomResourceIncome(_knowledgeKeeper.ResourceIncomeMap);
         SimulationInitializer.GenerateRandomMoisture(_knowledgeKeeper.MoistureMap);
         SimulationInitializer.SpawnFungalInCenter(_fungusManager);
+        SimulationInitializer.SpawnResourceIncomeInCenter(_knowledgeKeeper);
+        SimulationInitializer.GenerateRandomResourceIncome(_knowledgeKeeper.ResourceIncomeMap);
     }
 
     public void Step()

@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using Fungus;
-using Unity.VisualScripting;
+using GridSystem;
 using UnityEngine;
 using Utils;
+using Utils.Singleton;
 
 [RequireComponent(typeof(DoNotDestroy))]
-public class KnowledgeKeeper : Utils.Singleton.Singleton<KnowledgeKeeper>
+public class KnowledgeKeeper : Singleton<KnowledgeKeeper>
 {
     public Dictionary<Vector2Int, float> ResourceMap = new Dictionary<Vector2Int, float>();
     public Dictionary<Vector2Int, float> ResourceIncomeMap = new Dictionary<Vector2Int, float>();
@@ -33,9 +34,15 @@ public class KnowledgeKeeper : Utils.Singleton.Singleton<KnowledgeKeeper>
                         resourcesAfterFlow.Add(neighbour, amountToGivePerNeighbour);
                     }
                 }
+                TryToClearResourceInCell(cell);
             }
         }
-        ResourceMap = resourcesAfterFlow;
+        
+        foreach(var cell in resourcesAfterFlow)
+        {
+            AddResourceToCell(cell.Key, resourcesAfterFlow[cell.Key]);
+            CGrid.Instance.SetFood(cell.Key, TryToGetResourceAmount(cell.Key));
+        }
     }
     
     public void PropagateResourceIncome()
@@ -43,6 +50,7 @@ public class KnowledgeKeeper : Utils.Singleton.Singleton<KnowledgeKeeper>
         foreach (var cell in ResourceIncomeMap.Keys)
         {
             AddResourceToCell(cell, ResourceIncomeMap[cell]);
+            CGrid.Instance.SetFood(cell, TryToGetResourceAmount(cell));
         }
     }
 
@@ -98,6 +106,14 @@ public class KnowledgeKeeper : Utils.Singleton.Singleton<KnowledgeKeeper>
             {
                 ResourceMap.Remove(cell);
             }
+        }
+    }
+    
+    public void TryToClearResourceInCell(Vector2Int cell)
+    {
+        if (ResourceMap.TryGetValue(cell, out var currentAmount))
+        {
+            ResourceMap.Remove(cell);
         }
     }
     

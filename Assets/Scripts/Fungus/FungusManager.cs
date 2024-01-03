@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
+using CoinPackage.Debugging;
+using GridSystem;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,8 +14,13 @@ namespace Fungus
     {
         private Dictionary<Vector2Int, CellType> FungusMap = new Dictionary<Vector2Int, CellType>();
         private Dictionary<Vector2Int, List<Vector2Int>> FungusResourceTransportMap = new Dictionary<Vector2Int, List<Vector2Int>>();
-        
-        private KnowledgeKeeper _knowledgeKeeper = KnowledgeKeeper.Instance;
+
+        private KnowledgeKeeper _knowledgeKeeper;
+
+        private void Start()
+        {
+            _knowledgeKeeper = KnowledgeKeeper.Instance;
+        }
 
         public void GrowHyphas()
         {
@@ -112,7 +119,9 @@ namespace Fungus
                 return;
             }
             FungusMap.Add(position, cellType);
-            
+            CGrid.Instance.SetCell(position, CellType.Hypha);
+            CGrid.Instance.SetFood(position, _knowledgeKeeper.TryToGetResourceAmount(position));
+            CDebug.LogWarning("Should spawn hypha at position: " + position );
         }
 
         private List<Vector2Int> GetAllCellTypePositions(CellType cellType)
