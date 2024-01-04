@@ -53,7 +53,7 @@ public static class SimulationInitializer
     public static void SpawnResourceIncomeInCenter(KnowledgeKeeper knowledgeKeeper)
     {
         var center = GetMiddleCell();
-        knowledgeKeeper.ResourceIncomeMap.Add(center, 1f);
+        knowledgeKeeper.ResourceIncomeMap.Add(center, DevSettings.Instance.appSettings.centerFoodIncomeAmount);
     }
 
     private static Vector2Int GetMiddleCell()

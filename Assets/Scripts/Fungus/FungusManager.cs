@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.NetworkInformation;
 using CoinPackage.Debugging;
 using GridSystem;
+using Settings;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -27,7 +29,7 @@ namespace Fungus
             List<Vector2Int> hyphaPositions = GetAllCellTypePositions(CellType.Hypha);
             foreach (var hyphaPosition in hyphaPositions)
             {
-                if(_knowledgeKeeper.TryToGetResourceAmount(hyphaPosition) < 1f)
+                if(_knowledgeKeeper.TryToGetResourceAmount(hyphaPosition) < DevSettings.Instance.appSettings.hyphaFoodLimitToGrow)
                 {
                     continue;
                 }
@@ -46,15 +48,46 @@ namespace Fungus
                     resourceSum += _knowledgeKeeper.TryToGetMoistureAmount(possiblePosition);
                     chances.Add(possiblePosition, resourceSum);
                 }
+
+                if (resourceSum == 0)
+                {
+                    var hardRandom = Random.Range(0, possiblePositions.Count);
+                    if (!IsCellFungus(possiblePositions[hardRandom]))
+                    {
+                        TryToAddHyphaAtPosition(possiblePositions[hardRandom]);
+                        TryToAddResourceTransport(hyphaPosition, possiblePositions[hardRandom]);
+                        continue;
+                    }
+
+                    if (Random.value > 0.5)
+                    {
+                        AddFungusFlow(hyphaPosition, possiblePositions[hardRandom]);
+                        continue;
+                    }
+                    AddFungusFlow(possiblePositions[hardRandom], hyphaPosition);
+                    continue;
+                }
+                
                 var randomValue = Random.Range(0, resourceSum);
 
                 foreach (var positions in chances)
                 {
                     if (randomValue <= positions.Value)
                     {
-                        TryToAddHyphaAtPosition(positions.Key);
-                        TryToAddResourceTransport(hyphaPosition, positions.Key);
+                        if (!IsCellFungus(positions.Key))
+                        {
+                            TryToAddHyphaAtPosition(positions.Key);
+                            TryToAddResourceTransport(hyphaPosition, positions.Key);
+                            break;
+                        }
+                        if (Random.value > 0.5)
+                        {
+                            AddFungusFlow(hyphaPosition, positions.Key);
+                            break;
+                        }
+                        AddFungusFlow(positions.Key, hyphaPosition);
                         break;
+                        
                     }
                 }
             }
@@ -88,7 +121,15 @@ namespace Fungus
             foreach (var direction in directions)
             {
                 Vector2Int newPosition = position + direction;
-                if (FungusMap.ContainsKey(newPosition))
+                if(newPosition.x >= DevSettings.Instance.appSettings.gridSize.x || newPosition.x < 0)
+                {
+                    continue;
+                }
+                if(newPosition.y >= DevSettings.Instance.appSettings.gridSize.y || newPosition.y < 0)
+                {
+                    continue;
+                }
+                if (AreFungusCellsConnected(position, newPosition))
                 {
                     continue;
                 }
@@ -124,6 +165,27 @@ namespace Fungus
             CDebug.LogWarning("Should spawn hypha at position: " + position );
         }
 
+        public bool AreFungusCellsConnected(Vector2Int left, Vector2Int right)
+        {
+            if(FungusResourceTransportMap.TryGetValue(left, value: out var value))
+            {
+                if(value.Contains(right))
+                {
+                    return true;
+                }
+            }
+            
+            if(FungusResourceTransportMap.TryGetValue(right, out var value1))
+            {
+                if(value1.Contains(left))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private List<Vector2Int> GetAllCellTypePositions(CellType cellType)
         {
             List<Vector2Int> result = new List<Vector2Int>();
@@ -135,6 +197,11 @@ namespace Fungus
                 }
             }
             return result;
+        }
+
+        private bool IsCellFungus(Vector2Int cell)
+        {
+            return FungusMap.ContainsKey(cell);
         }
     }
 }

@@ -15,6 +15,8 @@ namespace Settings {
         public Color groundColor;
         public Color foodColor;
         public Color obstacleColor;
+        public Vector2 FoodColorClamp;
+        [Range(0f, 3f)] public float timeBetweenUpdates;
 
         [Header("Resources")] 
         public float incomeCellsPercentage;
@@ -22,5 +24,9 @@ namespace Settings {
         
         [Header("Moisture")] 
         public Vector2 moistureRange;
+        
+        [Header("Fungus")] 
+        public float centerFoodIncomeAmount;
+        public float hyphaFoodLimitToGrow;
     }   
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Fungus;
+using Settings;
 using Utils.Singleton;
 using UnityEngine;
 using Utils;
@@ -11,6 +12,9 @@ public class GameManager : Singleton<GameManager>
 {
     private KnowledgeKeeper _knowledgeKeeper;
     private FungusManager _fungusManager;
+
+    private bool _isStarted = false;
+    float elapsed = 0f;
 
     private void Start()
     {
@@ -24,6 +28,20 @@ public class GameManager : Singleton<GameManager>
         SimulationInitializer.SpawnFungalInCenter(_fungusManager);
         SimulationInitializer.SpawnResourceIncomeInCenter(_knowledgeKeeper);
         SimulationInitializer.GenerateRandomResourceIncome(_knowledgeKeeper.ResourceIncomeMap);
+        _isStarted = true;
+    }
+
+    private void Update()
+    {
+        if (!_isStarted) {
+            return;
+        }
+        
+        elapsed += Time.deltaTime;
+        if (elapsed >= DevSettings.Instance.appSettings.timeBetweenUpdates) {
+            elapsed = 0;
+            Step();
+        }
     }
 
     public void Step()

@@ -12,10 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e86ef661267726a469f32080b147d2cb, type: 3}
   m_Name: AppSettings
   m_EditorClassIdentifier: 
-  gridSize: {x: 50, y: 50}
+  gridSize: {x: 300, y: 300}
   cameraMovementSpeed: 1.01
   cameraZoomRange: {x: 1, y: 20}
   slowWhenZoomed: 1
   groundColor: {r: 1, g: 1, b: 1, a: 1}
   foodColor: {r: 0.7075472, g: 0.5840602, b: 0.5840602, a: 1}
   obstacleColor: {r: 0.2830189, g: 0.2830189, b: 0.2830189, a: 1}
+  FoodColorClamp: {x: 0, y: 80000}
+  timeBetweenUpdates: 0.06
+  incomeCellsPercentage: 0
+  resourceIncomeRange: {x: 0, y: 0}
+  moistureRange: {x: 0, y: 0}
+  centerFoodIncomeAmount: 80000
+  hyphaFoodLimitToGrow: 0.01
