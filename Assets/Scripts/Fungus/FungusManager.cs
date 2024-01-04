@@ -29,19 +29,23 @@ namespace Fungus
             List<Vector2Int> hyphaPositions = GetAllCellTypePositions(CellType.Hypha);
             foreach (var hyphaPosition in hyphaPositions)
             {
-                if(DoesCellHasEnoughResources(hyphaPosition))
+                if(!DoesCellHasEnoughResources(hyphaPosition))
                 {
                     continue;
                 }
 
                 MakeRandomGrow(hyphaPosition);
                 MakeConnection(hyphaPosition);
+                
+                if (DevSettings.Instance.appSettings.hyphaReRollFlowDirectionIfNotComingOut)
+                {
+                    if (DoesCellGetsFoodFromAllDirections(hyphaPosition))
+                    {
+                        CDebug.LogWarning("Detected cell that gets food from all directions");
+                        InvertRandomConnection(hyphaPosition);
+                    }
+                }
             }
-        }
-
-        private void InvertRandomConnection(Vector2Int cell)
-        {
-            
         }
 
         private void MakeRandomGrow(Vector2Int cell)
@@ -78,12 +82,9 @@ namespace Fungus
             {
                 if (randomValue <= positions.Value)
                 {
-                    if (!IsCellFungus(positions.Key))
-                    {
-                        TryToAddHyphaAtPosition(positions.Key);
-                        TryToAddResourceTransport(cell, positions.Key);
-                        return;
-                    }
+                    TryToAddHyphaAtPosition(positions.Key);
+                    TryToAddResourceTransport(cell, positions.Key);
+                    return;
                 }
             }
         }
@@ -108,9 +109,30 @@ namespace Fungus
             }
         }
 
+        private bool DoesCellGetsFoodFromAllDirections(Vector2Int cell)
+        {
+            //TODO: Handle case when cell is at the edge
+            return GetAllPositionsFeedingMe(cell).Count == 4;
+        }
+
+        private void InvertRandomConnection(Vector2Int cell)
+        {
+            var feeders = GetAllPositionsFeedingMe(cell);
+            var randomFeeder = feeders[Random.Range(0, feeders.Count)];
+            
+            InvertConnection(randomFeeder, cell);
+        }
+
+        private void InvertConnection(Vector2Int actualFeeder, Vector2Int actualReceiver)
+        {
+            FungusResourceTransportMap[actualFeeder].Remove(actualReceiver);
+            FungusResourceTransportMap[actualReceiver].Add(actualFeeder);
+            CDebug.LogWarning("DIRECTION INVERTED");
+        }
+
         private bool DoesCellHasEnoughResources(Vector2Int cell)
         {
-            return _knowledgeKeeper.TryToGetResourceAmount(cell) <
+            return _knowledgeKeeper.TryToGetResourceAmount(cell) >=
                    DevSettings.Instance.appSettings.hyphaFoodLimitToGrow;
         }
 
@@ -128,8 +150,8 @@ namespace Fungus
             }
             FungusResourceTransportMap.Add(from, new List<Vector2Int>{ to });
         }
-        
-        public List<Vector2Int> GetPossibleGrowPositions(Vector2Int position)
+
+        private List<Vector2Int> GetPossibleGrowPositions(Vector2Int position)
         {
             List<Vector2Int> result = new List<Vector2Int>();
             Vector2Int[] directions = new Vector2Int[]
@@ -161,8 +183,8 @@ namespace Fungus
             }
             return result;
         }
-        
-        public List<Vector2Int> GetPossibleConnectionPositions(Vector2Int position)
+
+        private List<Vector2Int> GetPossibleConnectionPositions(Vector2Int position)
         {
             List<Vector2Int> result = new List<Vector2Int>();
             Vector2Int[] directions = new Vector2Int[]
@@ -181,22 +203,58 @@ namespace Fungus
                 if(newPosition.y >= DevSettings.Instance.appSettings.gridSize.y || newPosition.y < 0) {
                     continue;
                 }
+                if (!IsCellFungus(newPosition)) {
+                    continue;
+                }
                 if (AreFungusCellsConnected(position, newPosition)) {
                     continue;
                 }
                 if (_knowledgeKeeper.RockList.Contains(newPosition)) {
                     continue;
                 }
-                if (!IsCellFungus(newPosition)) {
-                    continue;
-                }
-                if (DoesCellHasEnoughResources(newPosition)) {
+                if (!DoesCellHasEnoughResources(newPosition)) {
                     continue;
                 }
                 
                 result.Add(newPosition);
             }
             return result;
+        }
+
+        private List<Vector2Int> GetAllPositionsFeedingMe(Vector2Int position)
+        {
+            List<Vector2Int> result = new List<Vector2Int>();
+            Vector2Int[] directions = new Vector2Int[]
+            {
+                Vector2Int.up,
+                Vector2Int.down,
+                Vector2Int.left,
+                Vector2Int.right
+            };
+            foreach (var direction in directions)
+            {
+                Vector2Int newPosition = position + direction;
+                if(newPosition.x >= DevSettings.Instance.appSettings.gridSize.x || newPosition.x < 0) {
+                    continue;
+                }
+                if(newPosition.y >= DevSettings.Instance.appSettings.gridSize.y || newPosition.y < 0) {
+                    continue;
+                }
+                if (!IsCellFungus(newPosition)) {
+                    continue;
+                }
+                if (!DoesCellFeedMe(position, direction)) {
+                    continue;
+                }
+                
+                result.Add(newPosition);
+            }
+            return result;
+        }
+
+        private bool DoesCellFeedMe(Vector2Int me, Vector2Int potentialFeeder)
+        {
+            return FungusResourceTransportMap.TryGetValue(potentialFeeder, out var value) && value.Contains(me);
         }
 
         public void TransportResources()
@@ -208,8 +266,8 @@ namespace Fungus
         {
             TryToAddCellTypeAtPosition(position, CellType.Hypha);
         }
-        
-        public void TryToAddCellTypeAtPosition(Vector2Int position, CellType cellType)
+
+        private void TryToAddCellTypeAtPosition(Vector2Int position, CellType cellType)
         {
             if (FungusMap.ContainsKey(position))
             {
@@ -222,7 +280,7 @@ namespace Fungus
             // CDebug.LogWarning("Should spawn hypha at position: " + position );
         }
 
-        public bool AreFungusCellsConnected(Vector2Int left, Vector2Int right)
+        private bool AreFungusCellsConnected(Vector2Int left, Vector2Int right)
         {
             if(FungusResourceTransportMap.TryGetValue(left, value: out var value))
             {
