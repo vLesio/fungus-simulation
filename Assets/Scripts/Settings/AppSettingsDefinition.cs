@@ -29,5 +29,6 @@ namespace Settings {
         [Header("Fungus")] 
         public float centerFoodIncomeAmount;
         public float hyphaFoodLimitToGrow;
+        public bool hyphaReRollFlowDirectionIfNotComingOut;
     }   
 }
