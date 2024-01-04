@@ -15,7 +15,8 @@ namespace Settings {
         public Color groundColor;
         public Color foodColor;
         public Color obstacleColor;
-        public Vector2 FoodColorClamp;
+        public Gradient foodGradient;
+        public float FoodColorClamp;
         [Range(0f, 3f)] public float timeBetweenUpdates;
 
         [Header("Resources")] 

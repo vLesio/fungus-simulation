@@ -55,11 +55,7 @@ namespace GridSystem {
                     break;
                 case CellType.Hypha:
                     _cellRenderer.color = 
-                        new Color(
-                            Math.Clamp(_food, DevSettings.Instance.appSettings.FoodColorClamp.x, DevSettings.Instance.appSettings.FoodColorClamp.y), 
-                            0f, 
-                            Math.Clamp(DevSettings.Instance.appSettings.FoodColorClamp.y - _food, DevSettings.Instance.appSettings.FoodColorClamp.x, DevSettings.Instance.appSettings.FoodColorClamp.y)
-                            );
+                        DevSettings.Instance.appSettings.foodGradient.Evaluate(_food / DevSettings.Instance.appSettings.FoodColorClamp);
                     break;
                 default:
                     CDebug.LogWarning($"Could not set cell, type {type % Colorize.Red} not found.");
