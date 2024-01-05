@@ -22,7 +22,7 @@ MonoBehaviour:
   foodGradient:
     serializedVersion: 2
     key0: {r: 0, g: 0.13428664, b: 1, a: 1}
-    key1: {r: 1, g: 0.76034176, b: 0, a: 1}
+    key1: {r: 1, g: 0.84413767, b: 0, a: 1}
     key2: {r: 1, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -30,7 +30,7 @@ MonoBehaviour:
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
     ctime0: 0
-    ctime1: 30455
+    ctime1: 24672
     ctime2: 65535
     ctime3: 0
     ctime4: 0
@@ -49,10 +49,11 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
-  FoodColorClamp: 0
+  FoodColorClamp: 20000
   timeBetweenUpdates: 0
   incomeCellsPercentage: 0
   resourceIncomeRange: {x: 0, y: 0}
   moistureRange: {x: 0, y: 0}
   centerFoodIncomeAmount: 80000
   hyphaFoodLimitToGrow: 0.01
+  hyphaReRollFlowDirectionIfNotComingOut: 1

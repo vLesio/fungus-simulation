@@ -43,11 +43,11 @@ public static class SimulationInitializer
         
         fungusManager.TryToAddHyphaAtPosition(center);
         var crossPositions = GetCrossPositionsAroundCell(center);
-        foreach (var crossPosition in crossPositions)
-        {
-            fungusManager.TryToAddHyphaAtPosition(crossPosition);
-            fungusManager.TryToAddResourceTransport(center, crossPosition);
-        }
+        // foreach (var crossPosition in crossPositions)
+        // {
+        //     fungusManager.TryToAddHyphaAtPosition(crossPosition);
+        //     fungusManager.TryToAddResourceTransport( center, crossPosition );
+        // }
     }
     
     public static void SpawnResourceIncomeInCenter(KnowledgeKeeper knowledgeKeeper)

@@ -41,6 +41,12 @@ namespace GridSystem {
             SetCell(_currentType);
         }
 
+        private float CalculateGradientColor(float x)
+        {
+            // log1000(x+1)*1000
+            return (float) Math.Log(_food + 1, DevSettings.Instance.appSettings.FoodColorClamp) * DevSettings.Instance.appSettings.FoodColorClamp;
+        }
+
         public void SetCell(CellType type) {
             // CDebug.Log($"Setting to {type}");
             _currentType = type;
@@ -55,7 +61,7 @@ namespace GridSystem {
                     break;
                 case CellType.Hypha:
                     _cellRenderer.color = 
-                        DevSettings.Instance.appSettings.foodGradient.Evaluate(_food / DevSettings.Instance.appSettings.FoodColorClamp);
+                        DevSettings.Instance.appSettings.foodGradient.Evaluate( CalculateGradientColor(_food) / (DevSettings.Instance.appSettings.FoodColorClamp + 1));
                     break;
                 default:
                     CDebug.LogWarning($"Could not set cell, type {type % Colorize.Red} not found.");

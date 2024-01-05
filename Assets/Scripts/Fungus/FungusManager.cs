@@ -41,7 +41,7 @@ namespace Fungus
                 {
                     if (DoesCellGetsFoodFromAllDirections(hyphaPosition))
                     {
-                        CDebug.LogWarning("Detected cell that gets food from all directions");
+                        // CDebug.LogWarning("Detected cell that gets food from all directions");
                         InvertRandomConnection(hyphaPosition);
                     }
                 }
@@ -125,9 +125,9 @@ namespace Fungus
 
         private void InvertConnection(Vector2Int actualFeeder, Vector2Int actualReceiver)
         {
-            FungusResourceTransportMap[actualFeeder].Remove(actualReceiver);
-            FungusResourceTransportMap[actualReceiver].Add(actualFeeder);
-            CDebug.LogWarning("DIRECTION INVERTED");
+            RemoveFungusFlow(actualFeeder, actualReceiver);
+            AddFungusFlow(actualReceiver, actualFeeder);
+            // CDebug.LogError("DIRECTION INVERTED");
         }
 
         private bool DoesCellHasEnoughResources(Vector2Int cell)
@@ -149,6 +149,17 @@ namespace Fungus
                 return;
             }
             FungusResourceTransportMap.Add(from, new List<Vector2Int>{ to });
+        }
+        
+        private void RemoveFungusFlow(Vector2Int from, Vector2Int to)
+        {
+            if (FungusResourceTransportMap.ContainsKey(from))
+            {
+                FungusResourceTransportMap[from].Remove(to);
+                return;
+            }
+
+            return;
         }
 
         private List<Vector2Int> GetPossibleGrowPositions(Vector2Int position)
@@ -243,7 +254,7 @@ namespace Fungus
                 if (!IsCellFungus(newPosition)) {
                     continue;
                 }
-                if (!DoesCellFeedMe(position, direction)) {
+                if (!DoesCellFeedMe(position, newPosition)) {
                     continue;
                 }
                 

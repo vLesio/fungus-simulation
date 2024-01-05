@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CoinPackage.Debugging;
 using Fungus;
 using Settings;
 using Utils.Singleton;
@@ -14,6 +15,7 @@ public class GameManager : Singleton<GameManager>
     private FungusManager _fungusManager;
 
     private bool _isStarted = false;
+    public int step;
     float elapsed = 0f;
 
     private void Start()
@@ -29,6 +31,7 @@ public class GameManager : Singleton<GameManager>
         SimulationInitializer.SpawnResourceIncomeInCenter(_knowledgeKeeper);
         SimulationInitializer.GenerateRandomResourceIncome(_knowledgeKeeper.ResourceIncomeMap);
         _isStarted = true;
+        step = 0;
     }
 
     private void Update()
@@ -46,9 +49,11 @@ public class GameManager : Singleton<GameManager>
 
     public void Step()
     {
+        step += 1;
         FungusGrowth();
         ResourceTransport();
         ResourceGrowth();
+        CDebug.Log(step);
     }
 
     private void FungusGrowth()
