@@ -68,7 +68,6 @@ namespace Painting {
         }
         
         public void ModifyCellLeft(Vector2Int cords) {
-            CDebug.LogWarning($"{paintingOperationLeft.ToString()}{paintingMode.ToString()}");
             cellToPaint = cords;
             Type thisType = this.GetType();
             MethodInfo methodInfo = thisType.GetMethod($"{paintingOperationLeft.ToString()}{paintingMode.ToString()}");
@@ -76,75 +75,75 @@ namespace Painting {
         }
 
         public void ModifyCellRight(Vector2Int cords) {
-            CDebug.LogWarning($"{paintingOperationRight.ToString()}{paintingMode.ToString()}");
             cellToPaint = cords;
             Type thisType = this.GetType();
             MethodInfo methodInfo = thisType.GetMethod($"{paintingOperationRight.ToString()}{paintingMode.ToString()}");
             methodInfo?.Invoke(this, null);
         }
 
-        private void SetFood() {
+        public void SetFood() {
             KnowledgeKeeper.Instance.SetResourceToCell(cellToPaint, value);
+            CDebug.LogWarning("SetFood");
         }
         
-        private void EraseFood()
+        public void EraseFood()
         {
             KnowledgeKeeper.Instance.TryToClearResourceInCell(cellToPaint);
         }
 
-        private void AddFood() {
+        public void AddFood() {
             KnowledgeKeeper.Instance.AddResourceToCell(cellToPaint, value);
         }
 
-        private void RemoveFood() {
+        public void RemoveFood() {
             KnowledgeKeeper.Instance.TryToRemoveResourceFromCell(cellToPaint, value);
         }
 
-        private void SetRock() {
+        public void SetRock() {
             KnowledgeKeeper.Instance.AddRockInCell(cellToPaint);
         }
         
-        private void EraseRock() {
+        public void EraseRock() {
             KnowledgeKeeper.Instance.RemoveRockFromCell(cellToPaint);
         }
 
-        private void AddRock() {
+        public void AddRock() {
             KnowledgeKeeper.Instance.AddRockInCell(cellToPaint);
         }
 
-        private void RemoveRock() {
+        public void RemoveRock() {
             KnowledgeKeeper.Instance.RemoveRockFromCell(cellToPaint);
         }
         
-        private void SetFoodSource() {
+        public void SetFoodSource() {
             KnowledgeKeeper.Instance.SetResourceIncomeInCell(cellToPaint, value);
         }
         
-        private void EraseFoodSource() {
+        public void EraseFoodSource() {
             KnowledgeKeeper.Instance.ClearResourceIncomeInCell(cellToPaint);
         }
 
-        private void AddFoodSource() {
+        public void AddFoodSource() {
             KnowledgeKeeper.Instance.AddResourceIncomeToCell(cellToPaint, value);
         }
 
-        private void RemoveFoodSource() {
+        public void RemoveFoodSource() {
             KnowledgeKeeper.Instance.RemoveResourceIncomeFromCell(cellToPaint, value);
         }
         
-        private void SetFungus() {
+        public void SetFungus() {
             FungusManager.Instance.TryToAddHyphaAtPosition(cellToPaint);
         }
         
-        private void EraseFungus() {
+        public void EraseFungus() {
             FungusManager.Instance.EraseHyphaAtPosition(cellToPaint);
         }
 
-        private void AddFungus() {
+        public void AddFungus() {
             FungusManager.Instance.TryToAddHyphaAtPosition(cellToPaint);
         }
 
-        private void RemoveFungus() {
+        public void RemoveFungus() {
             FungusManager.Instance.EraseHyphaAtPosition(cellToPaint);
         }
         
