@@ -385,7 +385,9 @@ namespace Fungus
 
             foreach (var cell in toRemove) {
                 FungusMap.Remove(cell);
-                FungusResourceTransportMap.Remove(cell);
+                
+                if (FungusResourceTransportMap.ContainsKey(cell))
+                    FungusResourceTransportMap.Remove(cell);
                     
                 _knowledgeKeeper.TryToClearResourceInCell(cell);
                 CGrid.Instance.SetFood(cell, 0);
