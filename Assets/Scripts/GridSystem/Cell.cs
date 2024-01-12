@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using CoinPackage.Debugging;
 using Fungus;
+using Painting;
 using Settings;
 using UnityEngine;
 
@@ -21,14 +22,11 @@ namespace GridSystem {
         }
 
         public void OnLeftClicked() {
-            CDebug.LogWarning($"Painting is not yet implemented (it may never be).");
-            CGrid.Instance.AddFood(Cords, 0.01f);
-            CGrid.Instance.SetCell(Cords, CellType.Hypha);
+            PaintingManager.Instance.ModifyCellLeft(Cords);
         }
         
         public void OnRightClicked() {
-            CDebug.LogWarning($"Painting is not yet implemented (it may never be).");
-            CGrid.Instance.SetCell(Cords, CellType.Dirt);
+            PaintingManager.Instance.ModifyCellRight(Cords);
         }
 
         public void SetFood(float food) {
