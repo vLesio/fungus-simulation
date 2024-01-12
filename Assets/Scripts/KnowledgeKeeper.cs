@@ -126,15 +126,6 @@ public class KnowledgeKeeper : Singleton<KnowledgeKeeper>
     {
         if (ResourceMap.TryGetValue(cell, out var currentAmount))
         {
-            if (currentAmount <= 0)
-            {
-                Debug.LogError("Trying to remove resource from cell with 0 amount");
-            }
-            if (currentAmount <= amount)
-            {
-                Debug.LogError("Trying to remove more resource than there is in cell");
-            }
-            
             ResourceMap[cell] = currentAmount - amount;
             CGrid.Instance.SetFood(cell, TryToGetResourceAmount(cell));
             if(ResourceMap[cell] <= 0)

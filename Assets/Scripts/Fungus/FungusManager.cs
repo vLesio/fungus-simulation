@@ -376,11 +376,10 @@ namespace Fungus
             
             foreach (var cell in FungusMap)
             {
-                if (_knowledgeKeeper.ResourceMap[cell.Key] < DevSettings.Instance.appSettings.hyphaConsumptionAmount)
+                if (!_knowledgeKeeper.ResourceMap.ContainsKey(cell.Key))
                 {
                     toRemove.Add(cell.Key);
-                    
-                }
+                } 
             }
 
             foreach (var cell in toRemove) {
