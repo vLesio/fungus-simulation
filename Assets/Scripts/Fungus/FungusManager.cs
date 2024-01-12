@@ -344,7 +344,6 @@ namespace Fungus
             {
                 if (cell.Value < DevSettings.Instance.appSettings.hyphaConsumptionAmount)
                 {
-                    // CDebug.LogWarning("Trying to kill a cell");
                     FungusMap.Remove(cell.Key);
                     FungusResourceTransportMap.Remove(cell.Key);
                     
