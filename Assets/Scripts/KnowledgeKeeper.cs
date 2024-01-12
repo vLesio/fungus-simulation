@@ -93,6 +93,7 @@ public class KnowledgeKeeper : Singleton<KnowledgeKeeper>
         if (!RockList.Contains(cell))
         {
             RockList.Add(cell);
+            CGrid.Instance.SetCell(cell, CellType.Obstacle);
         }
     }
     
@@ -101,6 +102,7 @@ public class KnowledgeKeeper : Singleton<KnowledgeKeeper>
         if (RockList.Contains(cell))
         {
             RockList.Remove(cell);
+            CGrid.Instance.SetCell(cell, CellType.Dirt);
         }
     }
     
@@ -114,7 +116,7 @@ public class KnowledgeKeeper : Singleton<KnowledgeKeeper>
         {
             ResourceMap.Add(cell, amount);
         }
-
+        CGrid.Instance.SetFood(cell, TryToGetResourceAmount(cell));
         return amount;
     }
     

@@ -82,36 +82,36 @@ namespace Painting {
             methodInfo?.Invoke(this, null);
         }
 
-        private void SetFood(Vector2Int cords) {
-            CDebug.Log("SetFood");
+        private void SetFood() {
+            KnowledgeKeeper.Instance.SetResourceToCell(cellToPaint, value);
         }
         
-        private void EraseFood(Vector2Int cords) {
-            CDebug.Log("EraseFood");
+        private void EraseFood() {
+            KnowledgeKeeper.Instance.SetResourceToCell(cellToPaint, 0);
         }
 
-        private void AddFood(Vector2Int cords) {
-            CDebug.Log("AddFood");
+        private void AddFood() {
+            KnowledgeKeeper.Instance.AddResourceToCell(cellToPaint, value);
         }
 
-        private void RemoveFood(Vector2Int cords) {
-            CDebug.Log("RemoveFood");
+        private void RemoveFood() {
+            KnowledgeKeeper.Instance.TryToRemoveResourceFromCell(cellToPaint, value);
         }
 
-        private void SetRock(Vector2Int cords) {
-            CDebug.Log("SetRock");
+        private void SetRock() {
+            KnowledgeKeeper.Instance.AddRockInCell(cellToPaint);
         }
         
-        private void EraseRock(Vector2Int cords) {
-            CDebug.Log("EraseRock");
+        private void EraseRock() {
+            KnowledgeKeeper.Instance.RemoveRockFromCell(cellToPaint);
         }
 
-        private void AddRock(Vector2Int cords) {
-            CDebug.Log("AddRock");
+        private void AddRock() {
+            KnowledgeKeeper.Instance.AddRockInCell(cellToPaint);
         }
 
-        private void RemoveRock(Vector2Int cords) {
-            CDebug.Log("RemoveRock");
+        private void RemoveRock() {
+            KnowledgeKeeper.Instance.RemoveRockFromCell(cellToPaint);
         }
         
         private void SetFoodSource(Vector2Int cords) {
