@@ -150,4 +150,47 @@ public class KnowledgeKeeper : Singleton<KnowledgeKeeper>
         }
     }
     
+    public void AddResourceIncomeToCell(Vector2Int cell, float amount)
+    {
+        if (ResourceIncomeMap.TryGetValue(cell, out var currentAmount))
+        {
+            ResourceIncomeMap[cell] = currentAmount + amount;
+        }
+        else
+        {
+            ResourceIncomeMap.Add(cell, amount);
+        }
+    }
+    
+    public void RemoveResourceIncomeFromCell(Vector2Int cell, float amount)
+    {
+        if (ResourceIncomeMap.TryGetValue(cell, out var currentAmount))
+        {
+            ResourceIncomeMap[cell] = currentAmount - amount;
+            if(ResourceIncomeMap[cell] <= 0)
+            {
+                ResourceIncomeMap.Remove(cell);
+            }
+        }
+    }
+
+    public void SetResourceIncomeInCell(Vector2Int cell, float amount)
+    {
+        if (ResourceIncomeMap.TryGetValue(cell, out var currentAmount))
+        {
+            ResourceIncomeMap[cell] = amount;
+        }
+        else
+        {
+            ResourceIncomeMap.Add(cell, amount);
+        }
+    }
+    
+    public void ClearResourceIncomeInCell(Vector2Int cell)
+    {
+        if (ResourceIncomeMap.TryGetValue(cell, out var currentAmount))
+        {
+            ResourceIncomeMap.Remove(cell);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using CoinPackage.Debugging;
+using Fungus;
 using TMPro;
 using UnityEngine;
 using Utils.Singleton;
@@ -86,8 +87,9 @@ namespace Painting {
             KnowledgeKeeper.Instance.SetResourceToCell(cellToPaint, value);
         }
         
-        private void EraseFood() {
-            KnowledgeKeeper.Instance.SetResourceToCell(cellToPaint, 0);
+        private void EraseFood()
+        {
+            KnowledgeKeeper.Instance.TryToClearResourceInCell(cellToPaint);
         }
 
         private void AddFood() {
@@ -114,36 +116,36 @@ namespace Painting {
             KnowledgeKeeper.Instance.RemoveRockFromCell(cellToPaint);
         }
         
-        private void SetFoodSource(Vector2Int cords) {
-            CDebug.Log("SetFoodSource");
+        private void SetFoodSource() {
+            KnowledgeKeeper.Instance.SetResourceIncomeInCell(cellToPaint, value);
         }
         
-        private void EraseFoodSource(Vector2Int cords) {
-            CDebug.Log("EraseFoodSource");
+        private void EraseFoodSource() {
+            KnowledgeKeeper.Instance.ClearResourceIncomeInCell(cellToPaint);
         }
 
-        private void AddFoodSource(Vector2Int cords) {
-            CDebug.Log("AddFoodSource");
+        private void AddFoodSource() {
+            KnowledgeKeeper.Instance.AddResourceIncomeToCell(cellToPaint, value);
         }
 
-        private void RemoveFoodSource(Vector2Int cords) {
-            CDebug.Log("RemoveFoodSource");
+        private void RemoveFoodSource() {
+            KnowledgeKeeper.Instance.RemoveResourceIncomeFromCell(cellToPaint, value);
         }
         
-        private void SetFungus(Vector2Int cords) {
-            CDebug.Log("SetFungus");
+        private void SetFungus() {
+            FungusManager.Instance.TryToAddHyphaAtPosition(cellToPaint);
         }
         
-        private void EraseFungus(Vector2Int cords) {
-            CDebug.Log("EraseFungus");
+        private void EraseFungus() {
+            FungusManager.Instance.EraseHyphaAtPosition(cellToPaint);
         }
 
-        private void AddFungus(Vector2Int cords) {
-            CDebug.Log("AddFungus");
+        private void AddFungus() {
+            FungusManager.Instance.TryToAddHyphaAtPosition(cellToPaint);
         }
 
-        private void RemoveFungus(Vector2Int cords) {
-            CDebug.Log("RemoveFungus");
+        private void RemoveFungus() {
+            FungusManager.Instance.EraseHyphaAtPosition(cellToPaint);
         }
         
         

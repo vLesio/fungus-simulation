@@ -29,12 +29,11 @@ namespace Fungus
             List<Vector2Int> hyphaPositions = GetAllCellTypePositions(CellType.Hypha);
             foreach (var hyphaPosition in hyphaPositions)
             {
-                if(!DoesCellHasEnoughResources(hyphaPosition))
+                if(DoesCellHasEnoughResources(hyphaPosition))
                 {
-                    continue;
+                    MakeRandomGrow(hyphaPosition);
                 }
 
-                MakeRandomGrow(hyphaPosition);
                 MakeConnection(hyphaPosition);
                 
                 if (DevSettings.Instance.appSettings.hyphaReRollFlowDirectionIfNotComingOut)
@@ -223,9 +222,10 @@ namespace Fungus
                 if (_knowledgeKeeper.RockList.Contains(newPosition)) {
                     continue;
                 }
-                if (!DoesCellHasEnoughResources(newPosition)) {
-                    continue;
-                }
+                // UNCOMENT IF YOU REALY KNOW WHAT YOU DOING :0
+                // if (!DoesCellHasEnoughResources(newPosition)) {
+                //     continue;
+                // }
                 
                 result.Add(newPosition);
             }
@@ -289,6 +289,38 @@ namespace Fungus
             CGrid.Instance.SetCell(position, CellType.Hypha);
             CGrid.Instance.SetFood(position, _knowledgeKeeper.TryToGetResourceAmount(position));
             // CDebug.LogWarning("Should spawn hypha at position: " + position );
+        }
+        
+        public void EraseHyphaAtPosition(Vector2Int position)
+        {
+            if(FungusMap.ContainsKey(position))
+            {
+                FungusMap.Remove(position);
+                CGrid.Instance.SetCell(position, CellType.Dirt);
+                CGrid.Instance.SetFood(position, _knowledgeKeeper.TryToGetResourceAmount(position));
+                if (FungusResourceTransportMap.ContainsKey(position))
+                {
+                    FungusResourceTransportMap.Remove(position);
+                }
+                
+                List<Vector2Int> result = new List<Vector2Int>();
+                Vector2Int[] directions = new Vector2Int[]
+                {
+                    Vector2Int.up,
+                    Vector2Int.down,
+                    Vector2Int.left,
+                    Vector2Int.right
+                };
+                foreach (var direction in directions)
+                {
+                    Vector2Int newPosition = position + direction;
+                    if (FungusResourceTransportMap.ContainsKey(newPosition) &&
+                        FungusResourceTransportMap[newPosition].Contains(position))
+                    {
+                        FungusResourceTransportMap[newPosition].Remove(position);
+                    }
+                }
+            }
         }
 
         private bool AreFungusCellsConnected(Vector2Int left, Vector2Int right)
