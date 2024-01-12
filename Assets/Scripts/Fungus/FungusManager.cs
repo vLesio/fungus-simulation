@@ -117,7 +117,7 @@ namespace Fungus
         private bool DoesCellGetsFoodFromAllDirections(Vector2Int cell)
         {
             //TODO: Handle case when cell is at the edge
-            return GetAllPositionsFeedingMe(cell).Count == 4;
+            return GetAllPositionsFeedingMeOrItIsRockOrEdge(cell).Count == 4;
         }
 
         private void InvertRandomConnection(Vector2Int cell)
@@ -265,6 +265,32 @@ namespace Fungus
                 }
                 
                 result.Add(newPosition);
+            }
+            return result;
+        }
+        
+        private List<Vector2Int> GetAllPositionsFeedingMeOrItIsRockOrEdge(Vector2Int position)
+        {
+            List<Vector2Int> result = new List<Vector2Int>();
+            Vector2Int[] directions = new Vector2Int[]
+            {
+                Vector2Int.up,
+                Vector2Int.down,
+                Vector2Int.left,
+                Vector2Int.right
+            };
+            foreach (var direction in directions)
+            {
+                Vector2Int newPosition = position + direction;
+                if (DoesCellFeedMe(position, newPosition)
+                    || _knowledgeKeeper.RockList.Contains(newPosition)
+                    || newPosition.x >= DevSettings.Instance.appSettings.gridSize.x
+                    || newPosition.x < 0
+                    || newPosition.y >= DevSettings.Instance.appSettings.gridSize.y
+                    || newPosition.y < 0)
+                {
+                    result.Add(newPosition);
+                }
             }
             return result;
         }
