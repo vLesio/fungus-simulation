@@ -18,6 +18,12 @@ namespace Fungus
         private Dictionary<Vector2Int, List<Vector2Int>> FungusResourceTransportMap = new Dictionary<Vector2Int, List<Vector2Int>>();
 
         private KnowledgeKeeper _knowledgeKeeper;
+        
+        public void ClearSimulation()
+        {
+            FungusMap.Clear();
+            FungusResourceTransportMap.Clear();
+        }
 
         private void Start()
         {

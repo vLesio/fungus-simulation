@@ -24,6 +24,19 @@ public class GameManager : Singleton<GameManager>
         _fungusManager = FungusManager.Instance;
     }
 
+    public void ClearSimulation()
+    {
+        _knowledgeKeeper.ClearSimulation();
+        _fungusManager.ClearSimulation();
+        GridSystem.CGrid.Instance.ClearSimulation();
+        _isStarted = false;
+    }
+
+    public void StartStopSimulation()
+    {
+        _isStarted = !_isStarted;
+    }
+
     public void Init()
     {
         SimulationInitializer.GenerateRandomMoisture(_knowledgeKeeper.MoistureMap);
