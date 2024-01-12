@@ -3762,9 +3762,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9da32570c9934832a6db531807099d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paintingMode: 0
+  typeDropdown: {fileID: 1560196740}
+  operationDropdown: {fileID: 1951284639}
+  valueField: {fileID: 846599690}
+  paintingMode: 2
   paintingOperationLeft: 0
   paintingOperationRight: 1
+  value: 0
   cellToPaint: {x: 0, y: 0}
 --- !u!4 &1546649577
 Transform:

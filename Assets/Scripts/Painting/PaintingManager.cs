@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Reflection;
 using CoinPackage.Debugging;
+using TMPro;
 using UnityEngine;
 using Utils.Singleton;
 
 namespace Painting {
     public class PaintingManager : Singleton<PaintingManager> {
+
+        [SerializeField] private TMP_Dropdown typeDropdown;
+        [SerializeField] private TMP_Dropdown operationDropdown;
+        [SerializeField] private TMP_InputField valueField;
 
         [SerializeField] private PaintingMode paintingMode;
         [SerializeField] private PaintingOperation paintingOperationLeft;
@@ -15,18 +20,50 @@ namespace Painting {
 
         protected override void Awake() {
             base.Awake();
+            typeDropdown.onValueChanged.AddListener(OnTypeChange);
+            operationDropdown.onValueChanged.AddListener(OnOperationChange);
+            valueField.onValueChanged.AddListener(OnValueChange);
         }
 
-        public void OnTypeChange() {
-            
+        public void OnTypeChange(int val) {
+            switch (val) {
+                case 0:
+                    paintingMode = PaintingMode.Rock;
+                    break;
+                case 1:
+                    paintingMode = PaintingMode.Food;
+                    break;
+                case 2:
+                    paintingMode = PaintingMode.FoodSource;
+                    break;
+                case 3:
+                    paintingMode = PaintingMode.Fungus;
+                    break;
+                default:
+                    paintingMode = PaintingMode.Rock;
+                    CDebug.LogWarning("Set incorrect painting mode.");
+                    break;
+            }
         }
 
-        public void OnOperationChange() {
-            
+        public void OnOperationChange(int val) {
+            switch (val) {
+                case 0:
+                    paintingOperationLeft = PaintingOperation.Set;
+                    paintingOperationRight = PaintingOperation.Erase;
+                    break;
+                case 1:
+                    paintingOperationLeft = PaintingOperation.Add;
+                    paintingOperationRight = PaintingOperation.Remove;
+                    break;
+                default:
+                    CDebug.LogWarning("Selected wrong painting command value.");
+                    break;
+            }
         }
 
-        public void OnValueChange() {
-            
+        public void OnValueChange(string val) {
+            value = float.Parse(val);
         }
         
         public void ModifyCellLeft(Vector2Int cords) {
