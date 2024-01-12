@@ -41,7 +41,6 @@ public class KnowledgeKeeper : Singleton<KnowledgeKeeper>
         foreach(var cell in resourcesAfterFlow)
         {
             AddResourceToCell(cell.Key, resourcesAfterFlow[cell.Key]);
-            CGrid.Instance.SetFood(cell.Key, TryToGetResourceAmount(cell.Key));
         }
     }
     
@@ -84,6 +83,37 @@ public class KnowledgeKeeper : Singleton<KnowledgeKeeper>
         {
             ResourceMap.Add(cell, amount);
         }
+        
+        CGrid.Instance.SetFood(cell, TryToGetResourceAmount(cell));
+        return amount;
+    }
+    
+    public void AddRockInCell(Vector2Int cell)
+    {
+        if (!RockList.Contains(cell))
+        {
+            RockList.Add(cell);
+        }
+    }
+    
+    public void RemoveRockFromCell(Vector2Int cell)
+    {
+        if (RockList.Contains(cell))
+        {
+            RockList.Remove(cell);
+        }
+    }
+    
+    public float SetResourceToCell(Vector2Int cell, float amount)
+    {
+        if (ResourceMap.TryGetValue(cell, out var currentAmount))
+        {
+            ResourceMap[cell] = amount;
+        }
+        else
+        {
+            ResourceMap.Add(cell, amount);
+        }
 
         return amount;
     }
@@ -102,6 +132,7 @@ public class KnowledgeKeeper : Singleton<KnowledgeKeeper>
             }
             
             ResourceMap[cell] = currentAmount - amount;
+            CGrid.Instance.SetFood(cell, TryToGetResourceAmount(cell));
             if(ResourceMap[cell] <= 0)
             {
                 ResourceMap.Remove(cell);
