@@ -329,5 +329,38 @@ namespace Fungus
         {
             return FungusMap.ContainsKey(cell);
         }
+
+        public void RemoveDeadCells()
+        {
+            Vector2Int[] directions = new Vector2Int[]
+            {
+                Vector2Int.up,
+                Vector2Int.down,
+                Vector2Int.left,
+                Vector2Int.right
+            };
+            
+            foreach (var cell in _knowledgeKeeper.ResourceMap)
+            {
+                if (cell.Value < DevSettings.Instance.appSettings.hyphaConsumptionAmount)
+                {
+                    // CDebug.LogWarning("Trying to kill a cell");
+                    FungusMap.Remove(cell.Key);
+                    FungusResourceTransportMap.Remove(cell.Key);
+                    
+                    _knowledgeKeeper.ResourceMap[cell.Key] = 0;
+                    CGrid.Instance.SetFood(cell.Key, 0);
+                    CGrid.Instance.SetCell(cell.Key, CellType.Dirt);
+                    
+                    foreach (var direction in directions)
+                    {
+                        if (DoesCellFeedMe(cell.Key, cell.Key + direction))
+                        {
+                            RemoveFungusFlow(cell.Key + direction, cell.Key);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
