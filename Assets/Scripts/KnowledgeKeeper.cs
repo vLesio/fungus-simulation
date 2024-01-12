@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Fungus;
 using GridSystem;
+using Settings;
 using UnityEngine;
 using Utils;
 using Utils.Singleton;
@@ -41,6 +42,7 @@ public class KnowledgeKeeper : Singleton<KnowledgeKeeper>
         foreach(var cell in resourcesAfterFlow)
         {
             AddResourceToCell(cell.Key, resourcesAfterFlow[cell.Key]);
+            TryToRemoveResourceFromCell(cell.Key, DevSettings.Instance.appSettings.hyphaConsumptionAmount);
         }
     }
     

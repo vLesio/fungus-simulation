@@ -387,7 +387,7 @@ namespace Fungus
                 FungusMap.Remove(cell);
                 FungusResourceTransportMap.Remove(cell);
                     
-                _knowledgeKeeper.ResourceMap[cell] = 0;
+                _knowledgeKeeper.TryToClearResourceInCell(cell);
                 CGrid.Instance.SetFood(cell, 0);
                 CGrid.Instance.SetCell(cell, CellType.Dirt);
                     
