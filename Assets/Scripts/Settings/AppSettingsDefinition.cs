@@ -30,5 +30,6 @@ namespace Settings {
         public float centerFoodIncomeAmount;
         public float hyphaFoodLimitToGrow;
         public bool hyphaReRollFlowDirectionIfNotComingOut;
+        public float hyphaConsumptionAmount;
     }   
 }

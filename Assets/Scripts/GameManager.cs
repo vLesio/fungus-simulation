@@ -53,6 +53,7 @@ public class GameManager : Singleton<GameManager>
         FungusGrowth();
         ResourceTransport();
         ResourceGrowth();
+        KillDeadCells();
         CDebug.Log(step);
     }
 
@@ -64,6 +65,11 @@ public class GameManager : Singleton<GameManager>
     private void ResourceTransport()
     {
         _fungusManager.TransportResources();
+    }
+
+    private void KillDeadCells()
+    {
+        _fungusManager.RemoveDeadCells();
     }
     
     private void ResourceGrowth()
