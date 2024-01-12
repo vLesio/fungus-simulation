@@ -28,7 +28,7 @@ public class GameManager : Singleton<GameManager>
     {
         _knowledgeKeeper.ClearSimulation();
         _fungusManager.ClearSimulation();
-        GridSystem.CGrid.Instance.ClearSimulation();
+        GridSystem.CGrid.Instance.ClearGrid();
         _isStarted = false;
     }
 

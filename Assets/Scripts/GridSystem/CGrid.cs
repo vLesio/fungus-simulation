@@ -21,11 +21,6 @@ namespace GridSystem {
             InitializeCells();
         }
 
-        public void ClearSimulation()
-        {
-            //TODO: clear simulation @lesio
-        }
-
         private void InitializeCells() {
             var cellWidth = 1f / _settings.gridSize.x;
             var cellHeight = 1f / _settings.gridSize.y;
