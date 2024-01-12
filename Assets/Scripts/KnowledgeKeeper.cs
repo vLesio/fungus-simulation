@@ -14,6 +14,14 @@ public class KnowledgeKeeper : Singleton<KnowledgeKeeper>
     public Dictionary<Vector2Int, float> ResourceIncomeMap = new Dictionary<Vector2Int, float>();
     public Dictionary<Vector2Int, float> MoistureMap = new Dictionary<Vector2Int, float>();
     public List<Vector2Int> RockList = new List<Vector2Int>();
+
+    public void ClearSimulation()
+    {
+        RockList.Clear();
+        ResourceMap.Clear();
+        ResourceIncomeMap.Clear();
+        MoistureMap.Clear();
+    }
     public void PropagateResourceFlow(Dictionary<Vector2Int, List<Vector2Int>> resourceFlowMap)
     {
         Dictionary<Vector2Int, float> resourcesAfterFlow = new Dictionary<Vector2Int, float>();
