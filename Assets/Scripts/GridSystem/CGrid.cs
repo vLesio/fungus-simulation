@@ -48,6 +48,13 @@ namespace GridSystem {
             }
         }
 
+        public void ClearGrid() {
+            foreach (var cell in _cells.Values) {
+                cell.SetFood(0f);
+                cell.SetCell(CellType.Dirt);
+            }
+        }
+
         public void SetFood(Vector2Int cellPos, float food) {
             if (_cells.TryGetValue(cellPos, out var cell)) {
                 cell.SetFood(food);
