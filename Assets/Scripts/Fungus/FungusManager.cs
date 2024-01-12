@@ -340,9 +340,9 @@ namespace Fungus
                 Vector2Int.right
             };
             
-            foreach (var cell in _knowledgeKeeper.ResourceMap)
+            foreach (var cell in FungusMap)
             {
-                if (cell.Value < DevSettings.Instance.appSettings.hyphaConsumptionAmount)
+                if (_knowledgeKeeper.ResourceMap[cell.Key] < DevSettings.Instance.appSettings.hyphaConsumptionAmount)
                 {
                     FungusMap.Remove(cell.Key);
                     FungusResourceTransportMap.Remove(cell.Key);
